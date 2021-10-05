@@ -1,5 +1,4 @@
 # FluentProcessing
-==================================
 
 [![NuGet](https://img.shields.io/nuget/v/FluentProcessing.svg)](https://www.nuget.org/packages/FluentProcessing/)
 
