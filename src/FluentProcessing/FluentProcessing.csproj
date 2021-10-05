@@ -16,11 +16,4 @@
 		<PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="readme.md">
-			<Pack>true</Pack>
-			<PackagePath>\</PackagePath>
-		</Content>
-	</ItemGroup>
 </Project>
