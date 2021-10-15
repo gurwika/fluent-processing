@@ -14,7 +14,7 @@ using FluentProcessing.Enumaretions;
 
 namespace FluentProcessing.Builders
 {
-    public class ProcessFlowBuilder : IProcessFlowBuilder
+    internal class ProcessFlowBuilder : IProcessFlowBuilder
     {
         private object _response = default;
         private readonly IList<StepContainer> _steps;
@@ -33,7 +33,7 @@ namespace FluentProcessing.Builders
             return new StepContext<TResponse>(this);
         }
 
-        public IStepContext<TResponse> StartWith<TStepBody, TRequest, TResponse>(TRequest request) 
+        public IStepContext<TResponse> StartWith<TStepBody, TRequest, TResponse>(TRequest request)
             where TStepBody : IStepBody<TRequest, TResponse>
             where TResponse : class
         {
@@ -133,6 +133,11 @@ namespace FluentProcessing.Builders
                     for (var i = 0; i < step.Steps.Count; i++)
                     {
                         var asyncResponseObject = await asyncStepsDynamicList[i];
+                        if (asyncResponseObject == null)
+                        {
+                            continue;
+                        }
+
                         var asyncResponseType = asyncResponseObject.GetType();
                         var stepProperty = stepResponseProperties.FirstOrDefault(x => x.PropertyType.Equals(asyncResponseType));
                         stepProperty?.SetValue(stepResponseObject, asyncResponseObject);
@@ -169,13 +174,13 @@ namespace FluentProcessing.Builders
             {
                 stepObject = _serviceProvider.GetService(type);
             }
-            
+
             var stepMethod = type.GetMethod("RunAsync");
             try
             {
                 return stepMethod.Invoke(stepObject, new object[] { requestParam });
             }
-            catch (TargetInvocationException ex) when(ex.InnerException != null)
+            catch (TargetInvocationException ex)
             {
                 throw ex.InnerException;
             }
